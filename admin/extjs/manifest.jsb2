@@ -1,0 +1,12 @@
+{
+    "projectName": "Aimeos mpesapaymentprovider extension",
+    "deployDir": "deploy",
+    "licenseText": "",
+    "pkgs": [{
+        "name": "Aimeos mpesapaymentprovider",
+        "file": "js/aimeos-mpesapaymentprovider.js",
+        "isDebug": true,
+        "fileIncludes": []
+    }],
+    "resources" : []
+}
