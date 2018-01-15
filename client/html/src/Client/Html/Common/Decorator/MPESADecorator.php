@@ -24,7 +24,7 @@ class MPESADecorator
         if( $this->view === null )
         {
             // fetch the supplier item from the database
-            $view->mydecorator_account_number = 'HEllo World';
+            $view->mydecorator_account_number = 'Actual account Number';
             $view->mydecoratorTotal = '24000';
  
             $this->view = $view;
