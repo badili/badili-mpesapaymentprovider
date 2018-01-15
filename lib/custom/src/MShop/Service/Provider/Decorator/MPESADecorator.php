@@ -13,7 +13,7 @@ class MPESADecorator
         $products = $view->get( 'listsItems', [] );
  
         // fetch some items from the database
-        $view->mydecoratorMyparam = 'Supuu';
+        $view->mydecoratorMyparam = 'Place holder text 12';
         $view->mydecoratorTotal = '2349900';
  
         return $view;
