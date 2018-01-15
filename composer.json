@@ -1,5 +1,5 @@
 {
-	"name": "aimeos/mpesapaymentprovider",
+	"name": "aimeos/badili-mpesapaymentprovider",
 	"description": "Aimeos mpesapaymentprovider extension",
 	"keywords": ["aimeos", "extension"],
 	"type": "aimeos-extension",
