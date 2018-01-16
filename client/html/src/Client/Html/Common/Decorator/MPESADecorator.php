@@ -1,6 +1,11 @@
 <?php 
 namespace Aimeos\Client\Html\Common\Decorator;
- 
+use \App\Models\User;
+use \App\Models\MoneyReceived;
+use \Illuminate\Support\Facades\Auth;
+use \Illuminate\Support\Facades\DB;
+use \App\Models\PaybillAccountNoOrderMap;
+
 class MPESADecorator
     extends \Aimeos\Client\Html\Common\Decorator\Base
     implements \Aimeos\Client\Html\Common\Decorator\Iface
@@ -23,9 +28,10 @@ class MPESADecorator
     {
         if( $this->view === null )
         {
-            // fetch the supplier item from the database
-            $view->mydecorator_account_number = 'Actual account Number';
-            $view->mydecoratorTotal = '24000';
+            // fetch the last record from the DB for the paybill account_number just recorded
+            $paybill_account_number_order_map = DB::table('paybill_account_no_order_map')->where('user_id', Auth::user()->id)->orderBy('id', 'desc')->first();
+            $view->mydecorator_account_number = $paybill_account_number_order_map->account_number;
+            $view->mydecoratorTotal = $paybill_account_number_order_map->amount;
  
             $this->view = $view;
         }

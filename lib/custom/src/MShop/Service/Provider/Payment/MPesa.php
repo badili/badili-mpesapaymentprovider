@@ -1,7 +1,6 @@
 <?php 
 
 namespace Aimeos\MShop\Service\Provider\Payment;
-use \Aimeos\Client\Html\Common\Decorator\MPESADecorator;
 use \Illuminate\Support\Facades\Auth;
 use \App\Models\User;
 use \App\Models\MoneyReceived;
@@ -36,6 +35,7 @@ class MPesa
         $new_paybill_acc_no_order_id_assoc = new PaybillAccountNoOrderMap();
         $new_paybill_acc_no_order_id_assoc->order_id =  $order_id;
         $new_paybill_acc_no_order_id_assoc->amount =  $total;
+        $new_paybill_acc_no_order_id_assoc->user_id =  Auth::user()->id;
         $new_paybill_acc_no_order_id_assoc->account_number = $paybill_account_number_for_transaction;
         $new_paybill_acc_no_order_id_assoc->save();
 
@@ -44,7 +44,6 @@ class MPesa
         $this->saveOrder( $order );
         
         // Update the context to include stuff we have added
-
         return parent::process( $order, $params );
     }
 }

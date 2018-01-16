@@ -27,5 +27,7 @@ $details = sprintf( $msg2, $order->getId(), date_create( $order->getTimeCreated(
 	<span class="intro-thank"><?= $enc->html( nl2br( $intro ), $enc::TRUST ); ?></span>
 	<span class="intro-details"><?= $enc->html( nl2br( $details ), $enc::TRUST ); ?></span>
 </p>
+<h3>Total == : <?php echo $this->get( 'total'); ?></h3>
+<h3>Account Number == : <?php echo $this->get( 'account_number' ); ?></h3>
 <?php $this->block()->stop(); ?>
 <?= $this->block()->get( 'email/payment/html/intro' ); ?>

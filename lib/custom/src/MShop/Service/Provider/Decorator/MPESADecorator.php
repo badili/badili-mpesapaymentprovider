@@ -13,18 +13,18 @@ class MPESADecorator
         $products = $view->get( 'listsItems', [] );
  
         // fetch some items from the database
-        $view->mydecoratorMyparam = 'Place holder text 12';
+        $view->mydecoratorMyparam = 'Place holder test';
         $view->mydecoratorTotal = '2349900';
  
         return $view;
     }
-    public function calcPrice( \Aimeos\MShop\Order\Item\Base\Iface $basket )
-	{
-	    // do something before
-	    $price = $this->getProvider()->calcPrice( $basket );
-		$price->setCosts( $price->getCosts() + 1000);
+ //    public function calcPrice( \Aimeos\MShop\Order\Item\Base\Iface $basket )
+	// {
+	//     // do something before
+	//     $price = $this->getProvider()->calcPrice( $basket );
+	// 	$price->setCosts( $price->getCosts() + 1000);
 
-	    // do something after
-	    return $price;
-	}
+	//     // do something after
+	//     return $price;
+	// }
 }
