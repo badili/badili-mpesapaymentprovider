@@ -1,7 +1,5 @@
 <?php 
 namespace Aimeos\Client\Html\Common\Decorator;
-use \App\Models\User;
-use \App\Models\MoneyReceived;
 use \Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\DB;
 use \App\Models\PaybillAccountNoOrderMap;
