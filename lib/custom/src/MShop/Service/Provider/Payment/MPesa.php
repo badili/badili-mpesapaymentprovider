@@ -26,26 +26,28 @@ class MPesa
         $order_id = $order->getBaseId();
         $basket = $this->getOrderBase( $order_id );
         $total = $basket->getPrice()->getValue() + $basket->getPrice()->getCosts();
+        $paybill_account_number_for_transaction = $this->unique_id();
+        $view = $this->getContext()->getView();
         
-        $paybill_account_number_for_transaction = uniqid($more_entropy=true);
-
         // associate the order with the paybill account number to be used , this
         // will be used on the /confirm method from the safaricom integration
-
         $new_paybill_acc_no_order_id_assoc = new PaybillAccountNoOrderMap();
         $new_paybill_acc_no_order_id_assoc->order_id =  $order_id;
         $new_paybill_acc_no_order_id_assoc->amount =  $total;
         $new_paybill_acc_no_order_id_assoc->user_id =  Auth::user()->id;
         $new_paybill_acc_no_order_id_assoc->account_number = $paybill_account_number_for_transaction;
-        $new_paybill_acc_no_order_id_assoc->save();
 
+        $new_paybill_acc_no_order_id_assoc->save();
         $status = \Aimeos\MShop\Order\Item\Base::PAY_PENDING;
         $order->setPaymentStatus( $status );
         $this->saveOrder( $order );
 
         // Send an email to the user with the order details
-        $product_name = 'VAT Testing 2018';
-        $product_price = 2000;
+        $product_name = 'VAT Testing 2018'; // Get this from the DB
+        $product_price = 2000; // Get this from the DB
+        $product_quantity = $basket->getPrice()->getQuantity();
+        $order_tax = $basket->getPrice()->getTaxValue();
+        $delivery_price = $basket->getServices()['delivery']->getPrice()->getCosts();
         
         $user_id = Auth::user()->id;
         $user = User::where('id', $user_id)->first();
@@ -66,10 +68,16 @@ class MPesa
         Mail::send('emails.mpesa-details', $email_data, function($msg) use ($email_data) {
             $msg->from('taxlawpundit@pwc.com', 'Pwc Tax Law Pundit');
             $msg->to($email_data['user_email']);
-            $msg->subject('PwC Tax Law Pundit || Your Order MPESA Payment Details!');
+            $msg->subject('PwC Tax Law Pundit || Order #'.$email_data['order_id'].' MPESA Payment Details!');
         });
 
         // Update the context to include stuff we have added
         return parent::process( $order, $params );
+    }
+    public function unique_id(){
+        $better_token = md5(uniqid(rand(), true));
+        $uniqueid = strtoupper(substr($better_token, 0, 5));
+        
+        return $uniqueid;
     }
 }

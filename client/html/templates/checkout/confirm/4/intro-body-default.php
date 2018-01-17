@@ -8,7 +8,7 @@
 
 $enc = $this->encoder();
 $total = $this->get( 'mydecoratorTotal');
-$account_number = $this->get( 'mydecorator_account_number', '112 Fallback');
+$account_number = $this->get( 'mydecorator_account_number');
 
 ?>
 <?php $this->block()->start( 'checkout/confirm/intro' ); ?>
