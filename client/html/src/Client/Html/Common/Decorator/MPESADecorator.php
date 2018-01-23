@@ -28,9 +28,10 @@ class MPESADecorator
         {
             // fetch the last record from the DB for the paybill account_number just recorded
             $paybill_account_number_order_map = DB::table('paybill_account_no_order_map')->where('user_id', Auth::user()->id)->orderBy('id', 'desc')->first();
-            $view->mydecorator_account_number = $paybill_account_number_order_map->account_number;
-            $view->mydecoratorTotal = $paybill_account_number_order_map->amount;
- 
+            if (isset($paybill_account_number_order_map)) {
+                $view->mydecorator_account_number = $paybill_account_number_order_map->account_number;
+                $view->mydecoratorTotal = $paybill_account_number_order_map->amount;
+            }
             $this->view = $view;
         }
  
