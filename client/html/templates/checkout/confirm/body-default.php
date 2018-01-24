@@ -37,37 +37,10 @@ $retryUrl = $this->url( $target, $controller, $action, $params, [], $config );
 		</ul>
 	<?php endif; ?>
 
-
-	<h1><?= $enc->html( $this->translate( 'client', 'Confirmation' ), $enc::TRUST ); ?></h1>
+	<h3><?= $enc->html( $this->translate( 'client', 'Order placed successfully' ), $enc::TRUST ); ?></h3>
 
 
 	<?= $this->block()->get( 'checkout/confirm/intro' ); ?>
-
-
-	<div class="checkout-confirm-basic">
-		<h2><?= $enc->html( $this->translate( 'client', 'Order status' ), $enc::TRUST ); ?></h2>
-		<?php if( isset( $this->confirmOrderItem ) ) : ?>
-			<ul class="attr-list">
-				<li class="form-item">
-					<span class="name">
-						<?= $enc->html( $this->translate( 'client', 'Order ID' ), $enc::TRUST ); ?>
-					</span>
-					<span class="value">
-						<?= $enc->html( $this->confirmOrderItem->getId() ); ?>
-					</span>
-				</li>
-				<li class="form-item">
-					<span class="name">
-						<?= $enc->html( $this->translate( 'client', 'Payment status' ), $enc::TRUST ); ?>
-					</span>
-					<span class="value">
-						<?php $code = 'pay:' . $this->confirmOrderItem->getPaymentStatus(); ?>
-						<?= $enc->html( $this->translate( 'client/code', $code ) ); ?>
-					</span>
-				</li>
-			</ul>
-		<?php endif; ?>
-	</div>
 
 
 	<div class="checkout-confirm-retry">
@@ -85,5 +58,18 @@ $retryUrl = $this->url( $target, $controller, $action, $params, [], $config );
 
 
 	<?= $this->block()->get( 'checkout/confirm/order' ); ?>
-
+	<div>
+		<p>To pay via MPesa;</p>
+		<ol>
+			<li>Go to M-PESA on your phone.</li>
+			<li>Select Lipa na MPESA.</li>
+			<li>Select Pay Bill.</li>
+			<li>Enter Business Number: 998701.</li>
+			<li>Enter the Account Number: <?php echo $this->get( 'mydecorator_account_number'); ?></li>
+			<li>Enter the Amount: <?php echo number_format($this->get( 'mydecoratorTotal')); ?></li>
+			<li>Enter your M-PESA PIN and Send.</li>
+			<li>You will receive a confirmation via SMS.</li>
+		</ol>
+		<p>Thank you for using The Tax Law Pundit</p>
+	</div>
 </section>
