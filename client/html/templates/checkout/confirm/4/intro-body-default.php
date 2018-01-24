@@ -23,7 +23,6 @@ $account_number = $this->get( 'mydecorator_account_number');
 	?>
 	<p class="note"><?= nl2br( $enc->html( $this->translate( 'client', "Your order of $all_products_names Act(s) was placed successfully and a payment of KShs. $total is pending in order to complete the transaction."), $enc::TRUST ) ); ?></p>
 <?= $this->get( 'introBody' ); ?>
-	<?php echo $this->partial( 'checkout/partials/pending-payment.php',['total' => $total, 'account_number' => $account_number ]); ?>
 </div>
 <?php $this->block()->stop(); ?>
 <?= $this->block()->get( 'checkout/confirm/intro' ); ?>
