@@ -23,8 +23,8 @@ class MPesa
     public function process( \Aimeos\MShop\Order\Item\Iface $order, array $params = array() )
     {
         // send the payment details to an external payment gateway
-        $order_id = $order->getBaseId();
-        $basket = $this->getOrderBase( $order_id );
+        $order_id = $order->getId();
+        $basket = $this->getOrderBase( $order->getBaseId() );
         $total = $basket->getPrice()->getValue() + $basket->getPrice()->getCosts();
         $paybill_account_number_for_transaction = $this->unique_id();
         $view = $this->getContext()->getView();
