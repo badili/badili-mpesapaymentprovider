@@ -28,20 +28,20 @@ class CyberSource
 	    $basket = $this->getOrderBase( $order->getBaseId() );
 	    // If the user address is not in Kenya remove the VAT from the price
 	    $price = $basket->getPrice();
-		$priceService = $price->getCosts();
-		$priceValue = $price->getValue();
-		$taxRate = $price->getTaxRate();
-		$total = $priceValue + $priceService;
+	    // Helpers to get the country code
+		$controller = \Aimeos\Controller\Frontend\Factory::createController( $this->getContext(), 'basket' );
+		$parts = \Aimeos\MShop\Order\Manager\Base\Base::PARTS_ALL;
+		$summaryBasket = $controller->load( $order->getBaseId(), $parts, false );
+		$taxRates = $price->getTaxRate( $summaryBasket );
 
-	    $productTotal =  $priceValue + $priceService;
-	    $taxAmount = ( $total ) * $taxRate / 100;
-	    
-	    $country = $basket->getAddresses()['payment']->getCountryId();
+	    $country = $summaryBasket->getAddresses()['payment']->getCountryId();
 	    if ($country == "KE") {
-	    	// Do nothing i.e don't minus the VAT
+	    	// Do nothing i.e include all the VAT
+	    	$total = $this->getAmount($price);
 	    }
 	    else {
-		    $total -= $taxAmount;
+	    	// Remove the tax, only charge the costs and price
+		    $total = $price->getValue() + $price->getCosts();
 	    }
 		// Build params for Cybersource	    
 	    $user = User::where('id', Auth::user()->id)->first();

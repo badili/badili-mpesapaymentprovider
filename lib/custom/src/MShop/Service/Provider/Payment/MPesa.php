@@ -25,10 +25,27 @@ class MPesa
         // send the payment details to an external payment gateway
         $order_id = $order->getId();
         $basket = $this->getOrderBase( $order->getBaseId() );
-        $total = $basket->getPrice()->getValue() + $basket->getPrice()->getCosts();
         $paybill_account_number_for_transaction = $this->unique_id();
         $view = $this->getContext()->getView();
         
+        // If the user address is not in Kenya remove the VAT from the price
+        $price = $basket->getPrice();
+        // Helpers to get the country code
+        $controller = \Aimeos\Controller\Frontend\Factory::createController( $this->getContext(), 'basket' );
+        $parts = \Aimeos\MShop\Order\Manager\Base\Base::PARTS_ALL;
+        $summaryBasket = $controller->load( $order->getBaseId(), $parts, false );
+        $taxRates = $price->getTaxRate( $summaryBasket );
+
+        $country = $summaryBasket->getAddresses()['payment']->getCountryId();
+        if ($country == "KE") {
+            // Do nothing i.e include all the VAT
+            $total = $this->getAmount($price);
+        }
+        else {
+            // Remove the tax, only charge the costs and price
+            $total = $price->getValue() + $price->getCosts();
+        }
+
         // associate the order with the paybill account number to be used , this
         // will be used on the /confirm method from the safaricom integration
         $new_paybill_acc_no_order_id_assoc = new PaybillAccountNoOrderMap();
