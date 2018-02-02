@@ -400,7 +400,14 @@ $errors = $this->get( 'summaryErrorCodes', [] );
 				<?php endif; ?>
 			</tr>
 		<?php endif; ?>
-		<?php $country = $this->summaryBasket->getAddresses()['payment']->getCountryId(); ?>
+		<?php 
+		$addresses_detail = $this->summaryBasket->getAddresses();
+		if ($addresses_detail !== []) {
+			$country = $addresses_detail['payment']->getCountryId();
+		} else {
+			$country = "Unknown";
+		}
+		?>
 		<?php foreach( $this->get( 'summaryTaxRates', [] ) as $taxRate => $priceItem ) : $taxValue = $priceItem->getTaxValue(); ?>
 			<?php if( $taxRate > '0.00' && $taxValue > '0.00' && $country == 'KE') : $priceTaxvalue += $taxValue; ?>
 				<tr class="tax">
