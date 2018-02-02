@@ -26,9 +26,25 @@ class CyberSource
     public function process( \Aimeos\MShop\Order\Item\Iface $order, array $params = array() )
     {
 	    $basket = $this->getOrderBase( $order->getBaseId() );
-	    $total = $basket->getPrice()->getValue() + $basket->getPrice()->getCosts();
-	    $user = User::where('id', Auth::user()->id)->first();
+	    // If the user address is not in Kenya remove the VAT from the price
+	    $price = $basket->getPrice();
+	    // Helpers to get the country code
+		$controller = \Aimeos\Controller\Frontend\Factory::createController( $this->getContext(), 'basket' );
+		$parts = \Aimeos\MShop\Order\Manager\Base\Base::PARTS_ALL;
+		$summaryBasket = $controller->load( $order->getBaseId(), $parts, false );
+		$taxRates = $price->getTaxRate( $summaryBasket );
 
+	    $country = $summaryBasket->getAddresses()['payment']->getCountryId();
+	    if ($country == "KE") {
+	    	// Do nothing i.e include all the VAT
+	    	$total = $this->getAmount($price);
+	    }
+	    else {
+	    	// Remove the tax, only charge the costs and price
+		    $total = $price->getValue() + $price->getCosts();
+	    }
+		// Build params for Cybersource	    
+	    $user = User::where('id', Auth::user()->id)->first();
 	    $access_key = 'f20c336db9c531e0a406951841f5ad41';
 	    $profile_id = "bbk_pwc_7326655_kes";
 	    $code = uniqid();

@@ -58,18 +58,20 @@ $retryUrl = $this->url( $target, $controller, $action, $params, [], $config );
 
 
 	<?= $this->block()->get( 'checkout/confirm/order' ); ?>
-	<div>
-		<p>To pay via MPesa;</p>
-		<ol>
-			<li>Go to M-PESA on your phone.</li>
-			<li>Select Lipa na MPESA.</li>
-			<li>Select Pay Bill.</li>
-			<li>Enter Business Number: 998701.</li>
-			<li>Enter the Account Number: <?php echo $this->get( 'mydecorator_account_number'); ?></li>
-			<li>Enter the Amount: <?php echo number_format($this->get( 'mydecoratorTotal')); ?></li>
-			<li>Enter your M-PESA PIN and Send.</li>
-			<li>You will receive a confirmation via SMS.</li>
-		</ol>
-		<p>Thank you for using The Tax Law Pundit</p>
-	</div>
+	<?php if ($this->summaryBasket->getServices()['payment']->getCode() == 'mpesa'): ?>
+		<div>
+			<p>To pay via MPesa;</p>
+			<ol>
+				<li>Go to M-PESA on your phone.</li>
+				<li>Select Lipa na MPESA.</li>
+				<li>Select Pay Bill.</li>
+				<li>Enter Business Number: 998701.</li>
+				<li>Enter the Account Number: <?php echo $this->get( 'mydecorator_account_number'); ?></li>
+				<li>Enter the Amount: <?php echo number_format($this->get( 'mydecoratorTotal')); ?></li>
+				<li>Enter your M-PESA PIN and Send.</li>
+				<li>You will receive a confirmation via SMS.</li>
+			</ol>
+			<p>Thank you for using The Tax Law Pundit</p>
+		</div>
+	<?php endif ?>
 </section>
