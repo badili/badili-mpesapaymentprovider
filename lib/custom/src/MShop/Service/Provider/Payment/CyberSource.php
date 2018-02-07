@@ -6,8 +6,6 @@ use \App\Models\User;
 use \App\Models\BankReferenceOrderMap;
 
 define ('HMAC_SHA256', 'sha256');
-define ('SECRET_KEY', '');
-
 
 class CyberSource
 	extends \Aimeos\MShop\Service\Provider\Payment\Base
@@ -45,8 +43,11 @@ class CyberSource
 	    }
 		// Build params for Cybersource	    
 	    $user = User::where('id', Auth::user()->id)->first();
-	    $access_key = 'f20c336db9c531e0a406951841f5ad41';
-	    $profile_id = "bbk_pwc_7326655_kes";
+	    // Get the context
+	    $config = $this->getContext()->getConfig();
+	    $access_key = $config->get( 'backend/cybersource/access_key' );
+	    $profile_id = $config->get( 'backend/cybersource/profile_id' );
+
 	    $code = uniqid();
 	    $signed_date_time = gmdate("Y-m-d\TH:i:s\Z");
 	    $reference_number = time();
@@ -375,7 +376,9 @@ class CyberSource
 	}
 
 	public function sign($params) {
-	  return $this->signData($this->buildDataToSign($params), SECRET_KEY);
+		$config = $this->getContext()->getConfig();
+		$secretKey = $config->get( 'backend/cybersource/secret_key' );
+	  	return $this->signData($this->buildDataToSign($params), $secretKey);
 	}
 
 	public function signData($data, $secretKey) {
