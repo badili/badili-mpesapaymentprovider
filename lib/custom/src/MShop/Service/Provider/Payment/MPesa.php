@@ -82,11 +82,15 @@ class MPesa
         $email_data['account_number'] = $paybill_account_number_for_transaction;
 
 
-        Mail::send('emails.mpesa-details', $email_data, function($msg) use ($email_data) {
-            $msg->from('taxlawpundit@pwc.com', 'Pwc Tax Law Pundit');
-            $msg->to($email_data['user_email']);
-            $msg->subject('PwC Tax Law Pundit || Order #'.$email_data['order_id'].' MPESA Payment Details!');
-        });
+        try {
+            Mail::send('emails.mpesa-details', $email_data, function($msg) use ($email_data) {
+                $msg->from('taxlawpundit@pwc.com', 'Pwc Tax Law Pundit');
+                $msg->to($email_data['user_email']);
+                $msg->subject('PwC Tax Law Pundit || Order #'.$email_data['order_id'].' MPESA Payment Details!');
+            });
+        } catch(\Exception $e) {
+            // Do nothing if swifmail transporter fails
+        }
 
         // Update the context to include stuff we have added
         return parent::process( $order, $params );
