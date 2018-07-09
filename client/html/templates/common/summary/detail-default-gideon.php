@@ -208,8 +208,8 @@ $errors = $this->get( 'summaryErrorCodes', [] );
 					</a>
 
 					<p class="code">
-						<span class="name"><?= $enc->html( $this->translate( 'client', 'Article no.:' ), $enc::TRUST ); ?></span>
-						<span class="value"><?= $product->getProductCode(); ?></span>
+						<span class="names"><?= $enc->html( $this->translate( 'client', 'Article no.:' ), $enc::TRUST ); ?></span>
+						<span class="values"><?= $product->getProductCode(); ?></span>
 					</p>
 
 					<?php foreach( $attrTypes as $attrType ) : ?>

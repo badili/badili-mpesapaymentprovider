@@ -4,7 +4,7 @@ namespace Aimeos\MShop\Service\Provider\Payment;
 use \Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Mail;
 use \App\Models\User;
-use \App\Models\PaybillAccountNoOrderMap;
+use \App\Models\PaymentOrderMap;
 
 class MPesa
     extends \Aimeos\MShop\Service\Provider\Payment\Base
@@ -48,11 +48,11 @@ class MPesa
 
         // associate the order with the paybill account number to be used , this
         // will be used on the /confirm method from the safaricom integration
-        $new_paybill_acc_no_order_id_assoc = new PaybillAccountNoOrderMap();
+        $new_paybill_acc_no_order_id_assoc = new PaymentOrderMap();
         $new_paybill_acc_no_order_id_assoc->order_id =  $order_id;
         $new_paybill_acc_no_order_id_assoc->amount =  $total;
         $new_paybill_acc_no_order_id_assoc->user_id =  Auth::user()->id;
-        $new_paybill_acc_no_order_id_assoc->account_number = $paybill_account_number_for_transaction;
+        $new_paybill_acc_no_order_id_assoc->ref_account_number = $paybill_account_number_for_transaction;
 
         $new_paybill_acc_no_order_id_assoc->save();
         $status = \Aimeos\MShop\Order\Item\Base::PAY_PENDING;
@@ -83,9 +83,9 @@ class MPesa
 
 
         Mail::send('emails.mpesa-details', $email_data, function($msg) use ($email_data) {
-            $msg->from('taxlawpundit@pwc.com', 'Pwc Tax Law Pundit');
+            $msg->from(config('pundit.from_email'), config('pundit.site_name'));
             $msg->to($email_data['user_email']);
-            $msg->subject('PwC Tax Law Pundit || Order #'.$email_data['order_id'].' MPESA Payment Details!');
+            $msg->subject(config('pundit.site_name') . ' - MPESA Payment Details');
         });
 
         // Update the context to include stuff we have added
