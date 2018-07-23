@@ -49,6 +49,9 @@ class CyberSource
 	    $access_key = $config->get( 'pundit/cybersource_access_key_soap' );
 	    $profile_id = $config->get( 'pundit/cybersource_kes_profile_id' );
 
+	    $access_key = 'f20c336db9c531e0a406951841f5ad41';
+	    $profile_id = 'bbk_pwc_7326655_kes';
+
 	    $code = uniqid();
 	    $signed_date_time = gmdate("Y-m-d\TH:i:s\Z");
 	    $reference_number = time();
@@ -74,6 +77,7 @@ class CyberSource
 	    $bill_to_address_country = $user->countryid;
 	    $bill_to_address_postal_code = $user->postal;
 	    $currency = $basket->getPrice()->getCurrencyId();
+	    $curency = 'KES';
 	    // define the payment information that should be sent to the external payment gateway
 	    $params = array(
 	    	"access_key" => $access_key,
@@ -379,6 +383,7 @@ class CyberSource
 	public function sign($params) {
 		$config = $this->getContext()->getConfig();
 		$secretKey = $config->get( 'backend/cybersource/secret_key' );
+		$secretKey = 'd25f07c2076b409e9a6b43c05d4e6ac857aab951b99e4086ab72ae2b52707494a96a86ceba974b45996f371f5d96d928bf05c0cc578742ffbaba68771cd908f631a6e1fc40a943f280db4e77c7a887c4a82621d94bca41bcb4c3a2cacce51c62a025d47c54c84fd683a96c97b5138a56a72954ca577e4ac2a375e602ccd9e1f2';
 	  	return $this->signData($this->buildDataToSign($params), $secretKey);
 	}
 
